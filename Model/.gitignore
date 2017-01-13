@@ -1,0 +1,5 @@
+/main
+/unittest
+.o
+.d
+/googletest
