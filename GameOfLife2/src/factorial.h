@@ -10,4 +10,6 @@ class GameOfLife {
 
   private:
     std::vector<std::vector<int>> map_;
+    int width_;
+    int height_;
 };
