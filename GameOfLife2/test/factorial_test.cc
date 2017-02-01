@@ -15,3 +15,10 @@ TEST(FactorialTest, GameOfLife)
   g.Set(11,11);
   ASSERT_EQ(0, g.Get(11,11));
 }
+
+TEST(FactorialTest, GameOfLife2)
+{
+  GameOfLife g(10, 10);
+  ASSERT_EQ(0, g.GetCount(0,0));
+
+}

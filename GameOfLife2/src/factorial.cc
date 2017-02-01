@@ -22,3 +22,7 @@ int GameOfLife::Get(int x, int y) {
     return 0;
   return map_[y][x];
 }
+
+int GameOfLife::GetCount(int , int ) {
+  return 0;
+}
