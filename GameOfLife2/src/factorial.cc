@@ -40,3 +40,13 @@ int GameOfLife::NextStatus(int status, int nei) {
     return 1;
   return 0;
 }
+
+void GameOfLife::NextGeneration() {
+  auto copy = map_;
+  for(int x = 0; x < width_; x++) {
+    for(int y = 0; y < height_; y++) {
+      copy[y][x] = NextStatus(map_[y][x], GetCount(x, y));
+    }
+  }
+  map_ = copy;
+}

@@ -32,3 +32,10 @@ TEST(FactorialTest, GameOfLife3)
 
   ASSERT_EQ(1, g.NextStatus(1,2));
 }
+
+TEST(FactorialTest, GameOfLife4)
+{
+  GameOfLife g(10, 10);
+
+  g.NextGeneration();
+}
