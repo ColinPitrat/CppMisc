@@ -8,7 +8,7 @@ class GameOfLife {
     int Get(int x, int y);
     void Set(int x, int y);
     int GetCount(int x, int y);
-    int NextStatus(int a, int b);
+    int NextStatus(int status, int nb_neighbours);
 
   private:
     std::vector<std::vector<int>> map_;
