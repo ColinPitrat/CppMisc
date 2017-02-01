@@ -8,6 +8,8 @@ class GameOfLife {
     int Get(int x, int y);
     void Set(int x, int y);
     int GetCount(int x, int y);
+    int NextStatus(int a, int b);
+
   private:
     std::vector<std::vector<int>> map_;
     int width_;

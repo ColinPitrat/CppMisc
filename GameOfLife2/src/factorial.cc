@@ -32,3 +32,7 @@ int GameOfLife::GetCount(int x, int y) {
   }
   return result;
 }
+
+int GameOfLife::NextStatus(int, int) {
+  return 0;
+}
