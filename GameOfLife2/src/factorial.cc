@@ -10,6 +10,8 @@ GameOfLife::GameOfLife(int x, int y) {
 }
 
 void GameOfLife::Set(int x, int y) {
+  if (x < 0 || y < 0)
+    return;
   map_[y][x] = 1;
 }
 
