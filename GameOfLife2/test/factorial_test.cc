@@ -1,7 +1,8 @@
 #include "factorial.h"
 #include <gtest/gtest.h>
 
-TEST(FactorialTest, Factorial_0_is_1)
+TEST(FactorialTest, GameOfLife)
 {
-  ASSERT_EQ(1, factorial(0));
+  GameOfLife g(10, 10);
+  ASSERT_EQ(0, g.Get(0, 0));
 }
