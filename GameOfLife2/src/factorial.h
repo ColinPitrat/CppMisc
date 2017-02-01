@@ -1,5 +1,6 @@
 #pragma once
 #include <cstdint>
+#include <vector>
 
 class GameOfLife {
   public:
@@ -7,4 +8,6 @@ class GameOfLife {
     int Get(int x, int y);
     void Set(int x, int y);
 
+  private:
+    std::vector<std::vector<int>> map_;
 };
