@@ -29,4 +29,6 @@ TEST(FactorialTest, GameOfLife3)
 {
   GameOfLife g(10, 10);
   ASSERT_EQ(0, g.NextStatus(0, 0));
+
+  ASSERT_EQ(1, g.NextStatus(1,2));
 }
