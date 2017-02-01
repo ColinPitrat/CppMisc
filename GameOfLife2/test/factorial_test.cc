@@ -31,6 +31,8 @@ TEST(FactorialTest, GameOfLife3)
   ASSERT_EQ(0, g.NextStatus(0, 0));
 
   ASSERT_EQ(1, g.NextStatus(1,2));
+
+  ASSERT_EQ(0, g.NextStatus(1, 4));
 }
 
 TEST(FactorialTest, GameOfLife4)
@@ -39,6 +41,8 @@ TEST(FactorialTest, GameOfLife4)
 
   g.Set(1, 1);
   ASSERT_EQ(1, g.Get(1,1));
+
   g.NextGeneration();
   ASSERT_EQ(0, g.Get(1,1));
+
 }
