@@ -46,3 +46,16 @@ TEST(FactorialTest, GameOfLife4)
   ASSERT_EQ(0, g.Get(1,1));
 
 }
+
+TEST(FactorialTest, GameOfLife5)
+{
+  GameOfLife g(10, 10);
+
+  g.Set(1, 1);
+  g.Set(1, 2);
+  g.Set(1, 3);
+  ASSERT_EQ(1, g.Get(1,1));
+  ASSERT_EQ(1, g.GetCount(1,1));
+
+  g.NextGeneration();
+}

@@ -30,7 +30,7 @@ int GameOfLife::GetCount(int x, int y) {
       result += Get(x+i, y+j);
     }
   }
-  return result;
+  return result - Get(x, y);
 }
 
 int GameOfLife::NextStatus(int status, int nei) {
