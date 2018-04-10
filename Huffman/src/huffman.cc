@@ -189,8 +189,22 @@ char decodeChar(const std::string& decoded) {
   return result;
 }
 
-std::unique_ptr<Node> decodeTrie(const std::string& encoded) {
-  return nullptr;
+const char* decodeTrie(Node* node, const char* encoded) {
+	if (*encoded == '0') {
+		encoded = decodeTrie(node->leftOrNew(), &encoded[1]);
+		encoded = decodeTrie(node->rightOrNew(), encoded);
+	} else if (*encoded == '1') {
+		node->setChar(decodeChar(std::string(&encoded[1], 8)));
+		encoded = &encoded[9];
+	}
+	// TODO(cpitrat): Handle bad input
+	return encoded;
+}
+
+std::unique_ptr<Node> decodeTrie(const std::string& encoded, const char** encoded_content) {
+  std::unique_ptr<Node> result(new Node(nullptr, nullptr));
+  *encoded_content = decodeTrie(result.get(), encoded.c_str());
+  return result;
 }
 
 std::string compress(const std::string& content) {
@@ -198,5 +212,12 @@ std::string compress(const std::string& content) {
   auto trie = buildTrie(freqs);
   auto table = buildTable(*trie);
   auto compressedContent = encodeContent(table, content);
-  return compressedContent;
+	auto encodedTrie = encodeTrie(*trie);
+  return encodedTrie + compressedContent;
+}
+
+std::string decompress(const std::string& decompress) {
+  const char *encoded_content = nullptr;
+  auto trie = decodeTrie(decompress, &encoded_content);
+  return decodeContent(*trie, std::string(encoded_content));
 }

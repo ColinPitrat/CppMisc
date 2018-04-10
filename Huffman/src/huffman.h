@@ -48,6 +48,8 @@ std::string encodeTrie(const Node& trie);
 
 std::string decodeContent(const Node& trie, const std::string& content);
 char decodeChar(const std::string& decoded);
-std::unique_ptr<Node> decodeTrie(const std::string& encoded);
+const char* decodeTrie(Node* node, const char* encoded);
+std::unique_ptr<Node> decodeTrie(const std::string& encoded, const char** encoded_content);
 
 std::string compress(const std::string& content);
+std::string decompress(const std::string& content);

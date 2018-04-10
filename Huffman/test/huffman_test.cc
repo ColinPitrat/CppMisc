@@ -166,40 +166,17 @@ TEST(NodeTest, buildTrie) {
   EXPECT_EQ("11", table['a']);
 }
 
-TEST(NodeTest, encodeContent) {
-  std::string content = "aaaaaabbcddddeeeee";
-  auto trie = buildTrie(computeFrequencies(content));
-  auto table = buildTable(*trie);
-  EXPECT_EQ("111111111111001001000010101011010101010", encodeContent(table, content));
-}
-
-TEST(NodeTest, encodeContentSingleChar) {
-  std::string content = "aaaaa";
-  auto trie = buildTrie(computeFrequencies(content));
-  auto table = buildTable(*trie);
-  EXPECT_EQ("11111", encodeContent(table, content));
-}
+struct CompressionTestCase {
+  std::string content;
+  std::string encodedTrie;
+  std::string encodedContent;
+  std::vector<unsigned int> freqs;
+};
 
 TEST(NodeTest, encodeChar) {
   EXPECT_EQ("01000001", encodeChar('A'));
   EXPECT_EQ("01100001", encodeChar('a'));
   EXPECT_EQ("01100101", encodeChar('e'));
-}
-
-TEST(NodeTest, encodeTrie) {
-  std::vector<unsigned int> freqs(256);
-  freqs['a'] = 6;
-  freqs['b'] = 2;
-  freqs['c'] = 1;
-  freqs['d'] = 4;
-  freqs['e'] = 5;
-
-  auto trie = buildTrie(freqs);
-  // 0001<c>1<b>1<d>01<e>1<a>
-  // a = 1100001 -> e = 1100101
-  std::string encoded = "0001011000111011000101011001000101100101101100001";
-
-  EXPECT_EQ(encoded, encodeTrie(*trie));
 }
 
 TEST(NodeTest, decodeChar) {
@@ -224,4 +201,84 @@ TEST(NodeTest, decodeContentSingleChar) {
   std::string expected = "aaaaa";
   auto trie = buildTrie(computeFrequencies(expected));
   EXPECT_EQ(expected, decodeContent(*trie, content));
+}
+
+TEST(NodeTest, decodeTrie) {
+  std::string encoded = "0001011000111011000101011001000101100101101100001";
+
+  std::vector<std::string> code(256);
+  code['a'] = "11";
+  code['b'] = "001";
+  code['c'] = "000";
+  code['d'] = "01";
+  code['e'] = "10";
+
+  const char *unused = nullptr;
+  auto trie = decodeTrie(encoded, &unused);
+  EXPECT_EQ(code, buildTable(*trie));
+}
+
+class CompressionTest : public testing::Test {
+ public:
+  void SetUp() override {
+    {
+      CompressionTestCase case1;
+      case1.content = "aaaaaabbcddddeeeee";
+      case1.freqs.resize(256);
+      case1.freqs['a'] = 6;
+      case1.freqs['b'] = 2;
+      case1.freqs['c'] = 1;
+      case1.freqs['d'] = 4;
+      case1.freqs['e'] = 5;
+      // 0001<c>1<b>1<d>01<e>1<a>
+      // a = 01100001 -> e = 01100101
+      case1.encodedTrie = "0001011000111011000101011001000101100101101100001";
+      case1.encodedContent = "111111111111001001000010101011010101010";
+      cases.push_back(case1);
+    }
+
+    {
+      CompressionTestCase case2;
+      case2.content = "aaaaa";
+      case2.freqs.resize(256);
+      case2.freqs['a'] = 5;
+      // 01<a>1<a>
+      case2.encodedTrie = "0101100001101100001";
+      case2.encodedContent = "11111";
+      cases.push_back(case2);
+    }
+  }
+
+ protected:
+  std::vector<CompressionTestCase> cases;
+};
+
+TEST_F(CompressionTest, encodeTrie) {
+  for (const auto& testCase : cases) {
+    auto trie = buildTrie(testCase.freqs);
+    EXPECT_EQ(testCase.encodedTrie, encodeTrie(*trie));
+  }
+}
+
+TEST_F(CompressionTest, encodeContent) {
+  for (const auto& testCase : cases) {
+    std::string content = testCase.content;
+    auto trie = buildTrie(computeFrequencies(content));
+    auto table = buildTable(*trie);
+    EXPECT_EQ(testCase.encodedContent, encodeContent(table, content));
+  }
+}
+
+TEST_F(CompressionTest, compress) {
+  for (const auto& testCase : cases) {
+    std::string compressed = testCase.encodedTrie + testCase.encodedContent;
+    EXPECT_EQ(compressed, compress(testCase.content));
+  }
+}
+
+TEST_F(CompressionTest, decompress) {
+  for (const auto& testCase : cases) {
+    std::string compressed = testCase.encodedTrie + testCase.encodedContent;
+    EXPECT_EQ(testCase.content, decompress(compressed));
+  }
 }
