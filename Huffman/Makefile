@@ -17,7 +17,7 @@ TEST_OBJECTS:=$(TEST_DEPENDS:.d=.o)
 
 #WARNINGS = -Wall -Wextra -Wzero-as-null-pointer-constant -Wformat=2 -Wold-style-cast -Wmissing-include-dirs -Wlogical-op -Woverloaded-virtual -Wpointer-arith -Wredundant-decls
 WARNINGS = -Wall -Wextra -Wformat=2 -Wold-style-cast -Wmissing-include-dirs -Wlogical-op -Woverloaded-virtual -Wpointer-arith -Wredundant-decls
-CFLAGS=$(WARNINGS) -g -std=c++11 -Isrc
+CFLAGS=$(WARNINGS) -g -std=c++14 -Isrc
 
 .PHONY: all superclean clean check_deps unittest
 
