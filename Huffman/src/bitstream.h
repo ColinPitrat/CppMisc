@@ -4,7 +4,7 @@
 
 class InputBitStream {
  public:
-  InputBitStream(std::unique_ptr<std::istream>& is);
+  InputBitStream(std::unique_ptr<std::istream> is);
 
   bool getBit();
 
@@ -14,15 +14,28 @@ class InputBitStream {
   int char_;
 };
 
+class InputBitStreamForTest : public InputBitStream {
+ public:
+  InputBitStreamForTest(const std::string& input);
+};
+
 class OutputBitStream {
  public:
-  OutputBitStream(std::unique_ptr<std::ostream>& os);
+  OutputBitStream(std::unique_ptr<std::ostream> os);
 
-  void pushBit(bool value);
-  void flush();
+  virtual void pushBit(bool value);
+  virtual void flush();
 
  protected:
   std::unique_ptr<std::ostream> os_;
   int idx_;
   char char_;
+};
+
+class OutputBitStreamForTest : public OutputBitStream {
+ public:
+  OutputBitStreamForTest(std::unique_ptr<std::ostream> os);
+
+  void pushBit(bool value) override;
+  void flush() override;
 };
