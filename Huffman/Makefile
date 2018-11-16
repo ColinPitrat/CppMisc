@@ -21,7 +21,7 @@ CFLAGS=$(WARNINGS) -g -std=c++14 -Isrc
 
 .PHONY: all superclean clean check_deps unittest
 
-all: unittest main
+all: runtest main
 
 $(DEPENDS): $(OBJDIR)/%.d: %.cc
 	@echo Computing dependencies for $<
@@ -41,6 +41,8 @@ $(TEST_OBJECTS): $(OBJDIR)/%.o: %.cc gtest
 
 unittest: $(OBJECTS) $(TEST_OBJECTS) gtest
 	g++ $(CFLAGS) $(GTEST_CFLAGS) $(GTEST_OBJECTS) $(OBJECTS) $(TEST_OBJECTS) test_main.cc -o unittest
+
+runtest: unittest
 	./unittest
 
 main: $(OBJECTS)
