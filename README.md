@@ -7,6 +7,9 @@ Various small programs in C++
 ## Algorithms
 A directory with small examples to play with STL algorithms.
 
+## GameOfLife
+A test-driven approach to Conway's game of life using modern C++.
+
 ## Huffman
 A toy implementation of Huffman encoding.
 
