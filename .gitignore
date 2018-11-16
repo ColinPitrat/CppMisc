@@ -1,1 +1,5 @@
 StringBlocks/test
+*/googletest/
+*/main
+*/obj/
+*/unittest
