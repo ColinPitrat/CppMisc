@@ -27,7 +27,7 @@ int factorial_main(int argc, char **argv) {
   }
 
   try {
-    std::cout << n << std::endl;
+    std::cout << factorial(n) << std::endl;
   } catch(std::out_of_range &e) {
     std::cerr << e.what() << std::endl;
     return -1;
