@@ -110,20 +110,5 @@ std::string GameOfLife::toString() {
   for (int y = 1; y <= h; ++y) {
     result[w*y-1] = '\n';
   }
-
-  /* This is the reference implementation
-  for (int y = 0; y < h; ++y) {
-    for (int x = 0; x < w-1; ++x) {
-      if (get(Coordinates{x, y}) == Cell::ALIVE) result[w*y+x] = '#';
-    }
-    result[w*y+w-1] = '\n';
-  }
-  */
-
-  /* This misses the \n at end of lines ... would be nice to have a clean way to add it
-  std::transform(begin(), end(), back_inserter(result), [=](const Coordinates& coord) {
-    return (get(coord) == Cell::ALIVE) ? '#' : ' ';
-  });
-  */
   return result;
 }
