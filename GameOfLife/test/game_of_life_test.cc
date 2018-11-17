@@ -12,8 +12,8 @@ class GameOfLifeTest : public ::testing::Test {
 };
 
 TEST_F(GameOfLifeTest, RemembersWidthAndHeight) {
-  ASSERT_EQ(Width(GRID_WIDTH), gol_.width());
-  ASSERT_EQ(Height(GRID_HEIGHT), gol_.height());
+  ASSERT_EQ(GRID_WIDTH, gol_.width().get());
+  ASSERT_EQ(GRID_HEIGHT, gol_.height().get());
 }
 
 TEST_F(GameOfLifeTest, InitializedWithDeadCells) {
@@ -47,9 +47,9 @@ TEST_F(GameOfLifeTest, CanSetCellAlive) {
 TEST_F(GameOfLifeTest, IteratesOverExpectedNumberOfCells) {
   int i = 0;
 
-  for(auto cell : gol_) {
+  for(const auto& coord : gol_) {
     i++;
-    ASSERT_EQ(Cell::DEAD, gol_.get(cell));
+    ASSERT_EQ(Cell::DEAD, gol_.get(coord));
   }
 
   ASSERT_EQ(GRID_WIDTH*GRID_HEIGHT, i);
@@ -149,15 +149,15 @@ TEST_F(GameOfLifeTest, EvolveSquare) {
 }
 
 void PrepareHorizontal(GameOfLife *gol) {
-  gol->set(Coordinates{2, 1}, Cell::ALIVE);
-  gol->set(Coordinates{2, 2}, Cell::ALIVE);
-  gol->set(Coordinates{2, 3}, Cell::ALIVE);
-}
-
-void PrepareVertical(GameOfLife *gol) {
   gol->set(Coordinates{1, 2}, Cell::ALIVE);
   gol->set(Coordinates{2, 2}, Cell::ALIVE);
   gol->set(Coordinates{3, 2}, Cell::ALIVE);
+}
+
+void PrepareVertical(GameOfLife *gol) {
+  gol->set(Coordinates{2, 1}, Cell::ALIVE);
+  gol->set(Coordinates{2, 2}, Cell::ALIVE);
+  gol->set(Coordinates{2, 3}, Cell::ALIVE);
 }
 
 TEST_F(GameOfLifeTest, EvolveBlinker) {
@@ -177,4 +177,20 @@ TEST_F(GameOfLifeTest, EvolveBlinker) {
   blinker.evolve();
 
   ASSERT_EQ(blinker, horizontal);
+}
+
+TEST_F(GameOfLifeTest, ToStringForSquare) {
+  GameOfLife square(Width(4), Height(4));
+
+  PrepareSquare(&square);
+
+  ASSERT_EQ("    \n ## \n ## \n    \n", square.toString());
+}
+
+TEST_F(GameOfLifeTest, ToStringForHorizontalLine) {
+  GameOfLife horizontal(Width(5), Height(5));
+
+  PrepareHorizontal(&horizontal);
+
+  ASSERT_EQ("     \n     \n ### \n     \n     \n", horizontal.toString());
 }

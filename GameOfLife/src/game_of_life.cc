@@ -11,7 +11,7 @@ Coordinates operator+(const Coordinates& lhs, const Coordinates& rhs) {
   return r;
 }
 
-void CellsIterator::operator++() {
+void CoordsIterator::operator++() {
   x_++;
   if (x_ >= w_) {
     x_ = 0;
@@ -19,12 +19,12 @@ void CellsIterator::operator++() {
   }
 }
 
-void CellsIterator::to_end() {
+void CoordsIterator::to_end() {
   x_ = 0;
   y_ = h_;
 }
 
-Coordinates CellsIterator::operator*() const {
+Coordinates CoordsIterator::operator*() const {
   return Coordinates{x_, y_};
 }
 
@@ -57,12 +57,12 @@ void GameOfLife::randomize() {
   });
 }
 
-CellsIterator GameOfLife::begin() {
-  return CellsIterator(this, width_.get(), height_.get());
+CoordsIterator GameOfLife::begin() const {
+  return CoordsIterator(this, width_, height_);
 }
 
-CellsIterator GameOfLife::end() {
-  CellsIterator result(this, width_.get(), height_.get());
+CoordsIterator GameOfLife::end() const {
+  CoordsIterator result(this, width_, height_);
   result.to_end();
   return result;
 }
@@ -83,12 +83,9 @@ Cell GameOfLife::next(const Coordinates& coord) const {
 }
 
 bool operator==(const GameOfLife& lhs, const GameOfLife& rhs) {
-  if (lhs.width() != rhs.width() || lhs.height() != rhs.height()) return false;
-  // TODO: Use iterator instead
-  for (int x = 0; x < lhs.width().get(); ++x) {
-    for (int y = 0; y < lhs.height().get(); ++y) {
-      if (lhs.get(Coordinates{x, y}) != rhs.get(Coordinates{x, y})) return false;
-    }
+  if (lhs.width().get() != rhs.width().get() || lhs.height().get() != rhs.height().get()) return false;
+  for (const auto& coord : lhs) {
+    if (lhs.get(coord) != rhs.get(coord)) return false;
   }
   return true;
 }
@@ -107,13 +104,23 @@ std::string GameOfLife::toString() {
   int w = width().get() + 1;
   int h = height().get();
   std::string result(w*h, ' ');
+  for (const auto& coord : *this) {
+    if (get(coord) == Cell::ALIVE) result[w*coord.y+coord.x] = '#';
+  }
+  for (int y = 1; y <= h; ++y) {
+    result[w*y-1] = '\n';
+  }
+
+  /* This is the reference implementation
   for (int y = 0; y < h; ++y) {
     for (int x = 0; x < w-1; ++x) {
       if (get(Coordinates{x, y}) == Cell::ALIVE) result[w*y+x] = '#';
     }
-    result[w*y] = '\n';
+    result[w*y+w-1] = '\n';
   }
-  /* This misses the \n at end of lines ...
+  */
+
+  /* This misses the \n at end of lines ... would be nice to have a clean way to add it
   std::transform(begin(), end(), back_inserter(result), [=](const Coordinates& coord) {
     return (get(coord) == Cell::ALIVE) ? '#' : ' ';
   });

@@ -20,27 +20,25 @@ struct Coordinates {
 
 Coordinates operator+(const Coordinates& lhs, const Coordinates& rhs);
 
-// TODO: Use strong types here too !
-class CellsIterator {
+class CoordsIterator {
   public:
-    CellsIterator(GameOfLife* g, int w, int h) : g_(g), w_(w), h_(h), x_(0), y_(0) {};
-    CellsIterator(GameOfLife* g, int w, int h, int x, int y) : g_(g), w_(w), h_(h), x_(x), y_(y) {};
+    CoordsIterator(const GameOfLife* g, Width w, Height h) : g_(g), w_(w.get()), h_(h.get()), x_(0), y_(0) {};
 
     void operator++();
     void to_end();
 
-    bool operator==(const CellsIterator& other) const {
+    bool operator==(const CoordsIterator& other) const {
       return x_ == other.x_ && y_ == other.y_ && w_ == other.w_ && h_ == other.h_;
     }
 
-    bool operator!=(const CellsIterator& other) const {
+    bool operator!=(const CoordsIterator& other) const {
       return !this->operator==(other);
     }
 
     Coordinates operator*() const;
 
   private:
-    GameOfLife* g_;
+    const GameOfLife* g_;
     int w_, h_;
     int x_, y_;
 };
@@ -57,8 +55,8 @@ class GameOfLife {
 
     void randomize();
 
-    CellsIterator begin();
-    CellsIterator end();
+    CoordsIterator begin() const;
+    CoordsIterator end() const;
 
     int count_neighbours(const Coordinates& coord, Cell cell) const;
     Cell next(const Coordinates& coord) const;

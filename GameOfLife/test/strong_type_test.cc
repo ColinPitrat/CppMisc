@@ -29,13 +29,3 @@ TEST(StrongTypeTest, MoveConstructionTransfersValue) {
   
   ASSERT_EQ(42, t2.get());
 }
-
-TEST(StrongTypeTest, EqualityOperatorComparesValue) {
-  TestType t1(42);
-  TestType t2(42);
-  TestType t3(17);
-
-  ASSERT_EQ(t1, t1);
-  ASSERT_EQ(t1, t2);
-  ASSERT_NE(t1, t3);
-}

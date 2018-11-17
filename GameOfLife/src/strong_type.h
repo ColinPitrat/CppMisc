@@ -12,16 +12,3 @@ class StrongType {
   private:
     Type value_;
 };
-
-template <typename Type, typename Name>
-bool operator==(const StrongType<Type, Name> lhs, const StrongType<Type, Name> rhs)
-{
-  return lhs.get() == rhs.get();
-}
-
-template <typename Type, typename Name>
-bool operator!=(const StrongType<Type, Name> lhs, const StrongType<Type, Name> rhs)
-{
-  return !operator==(lhs, rhs);
-}
-
